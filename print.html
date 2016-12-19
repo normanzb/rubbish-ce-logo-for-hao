@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Print the fucking barcode in A4</title>
+    <style>
+        .row
+        {
+            display: flex;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .item 
+        {
+            width: 30%;
+            margin: .5vh 1.5%;
+            position: relative;
+            outline: 1px dashed #DEDEDE;
+        }
+        .item img 
+        {
+            display: block;
+        }
+        .item .ce
+        {
+            width: 100%;
+        }
+        .item .barcode
+        {
+            width: 36%;
+            position: absolute;
+            right: 20px;
+            top: 20px;
+        }
+
+        @media print 
+        {
+            body
+            {
+                margin: 0;
+                padding: 0;
+            }
+            #barcode-select
+            {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <select name="" id="barcode-select"></select>
+    <div id="output">
+        
+    </div>
+    <script id="template" type="text/template">
+        <div class="item">
+            <img class="ce" src="./ce.png" />
+            <img class="barcode" src="${barcode}" />
+        </div>
+    </script>
+    <script>
+        'use strict';
+
+        var files = [
+            'color-engine.png',
+            'color-wagon.png',
+        ];
+
+        for(var charCode = 65; charCode < 65 + 26; charCode++) {
+            files.push('color-' + String.fromCharCode(charCode) + '.png');
+        }
+
+        var templateEl = document.getElementById('template');
+        var outputEl = document.getElementById('output');
+        var barcodeSelect = document.getElementById('barcode-select');
+        var template = templateEl.innerHTML;
+
+
+        function render(selected) {
+            var output = '';
+
+            for(var i = 0; i < 11; i++) {
+                output += '<div class="row">';
+                for(var j = 0; j < 3; j++) {
+                    output += template.replace(/\$\{barcode\}/g, './barcode/' + selected);
+                }
+                output += '</div>';
+            }
+
+            outputEl.innerHTML = output;   
+        }
+
+        for(var i = 0; i < files.length; i++) {
+            var option = document.createElement('option');
+            option.innerHTML = files[i];
+            option.setAttribute('value', files[i]);
+            barcodeSelect.appendChild(option);
+        }
+
+        barcodeSelect.onchange = function() {
+            render(barcodeSelect.value);
+        };
+
+        render(barcodeSelect.value);
+    </script>
+</body>
+</html>
