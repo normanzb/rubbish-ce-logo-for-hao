@@ -2,20 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Print the fucking barcode in A4</title>
+    <title>Print the barcode in A4</title>
     <style>
         .row
         {
             display: flex;
-            width: 100%;
-            margin: 0 auto;
+            width: auto;
+            margin: .094in 0.15in;
         }
         .item 
         {
-            width: 30%;
-            margin: .5vh 1.5%;
+            width: 2.56in;
+            height: .98in;
+            margin: 0 .05in;
+            padding: .12in .3in;
+            box-sizing: border-box;
             position: relative;
             outline: 1px dashed #DEDEDE;
+            font-family: verdana;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: .08in;
         }
         .item img 
         {
@@ -23,14 +30,21 @@
         }
         .item .ce
         {
-            width: 100%;
+            height: .5in;
+            float: left;
         }
         .item .barcode
         {
-            width: 36%;
-            position: absolute;
-            right: 20px;
-            top: 20px;
+            height: .5in;
+            float: right;
+        }
+        .item span
+        {
+            float: left;
+            width: 100%;
+            display: block;
+            text-align: center;
+            margin: .12in 0;
         }
 
         @media print 
@@ -45,6 +59,13 @@
                 display: none;
             }
         }
+
+        @page 
+        {
+            margin: .43in 0;
+            padding: 0;
+        }
+
     </style>
 </head>
 <body>
@@ -56,6 +77,7 @@
         <div class="item">
             <img class="ce" src="./ce.png" />
             <img class="barcode" src="${barcode}" />
+            <span>http://www.funworldtoys.co.uk/</span>
         </div>
     </script>
     <script>
@@ -79,7 +101,7 @@
         function render(selected) {
             var output = '';
 
-            for(var i = 0; i < 11; i++) {
+            for(var i = 0; i < 10; i++) {
                 output += '<div class="row">';
                 for(var j = 0; j < 3; j++) {
                     output += template.replace(/\$\{barcode\}/g, './barcode/' + selected);
