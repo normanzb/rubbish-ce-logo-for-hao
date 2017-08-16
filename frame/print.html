@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Print the barcode in A4</title>
+    <style>
+        .paper > .row
+        {
+            display: flex;
+            width: auto;
+            margin: .094in 0.15in;
+        }
+        .item 
+        {
+            width: 2.56in;
+            /*height: .98in;*/
+            margin: 0 .05in;
+            box-sizing: border-box;
+            position: relative;
+            outline: 1px dashed #DEDEDE;
+            font-family: verdana;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: .08in;
+        }
+        .item > .inner 
+        {
+            margin: .12in .2in;
+        }
+        .item > .inner > .row
+        {
+            margin: .1in 0;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .item > .inner > .row.warning
+        {
+            display: none;
+        }
+        html.has-warning .item > .inner > .row.warning
+        {
+            display: block;
+        }
+        .item > .inner > .row > .ce
+        {
+            height: .5in;
+            flex-basis: 40%;
+            flex-grow: 0;
+        }
+        .item > .inner > .row > .barcode
+        {
+            flex-basis: 50%;
+            flex-grow: 0;
+        }
+        .item > .inner > .row.url
+        {
+            justify-content: center;
+        }
+
+        @media print 
+        {
+            body
+            {
+                margin: 0;
+                padding: 0;
+            }
+        }
+
+        @page 
+        {
+            margin: .43in 0;
+            padding: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script>
+    <div id="output" class="paper">
+        
+    </div>
+    <script id="template" type="text/template">
+        <div class="item">
+            <div class="inner">
+                <div class="row">
+                    <img class="ce" src="./ce.png" />
+                    <svg class="barcode"></svg>
+                </div>
+                <div class="row warning">
+                    <b>Warning!</b> This toy contains small parts, small cars, metal wheels, and screws. Not suitable for children under 36 months, choking hazard. 
+                </div>
+                <div class="row url">
+                    <span class="url">http://www.funworldtoys.co.uk/</span>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script>
+        'use strict';
+
+        var templateEl = document.getElementById('template');
+        var outputEl = document.getElementById('output');
+        var template = templateEl.innerHTML;
+
+        function render(value) {
+            if (value['has-warning']) {
+                document.documentElement.classList.add('has-warning');
+            }
+            else {
+                document.documentElement.classList.remove('has-warning');
+            }
+
+            var output = '';
+
+            for(var i = 0; i < 10; i++) {
+                output += '<div class="row">';
+                for(var j = 0; j < 3; j++) {
+                    output += template;
+                }
+                output += '</div>';
+            }
+
+            outputEl.innerHTML = output;   
+            window.JsBarcode('.barcode', value.content, {
+                width: 1,
+                height: 36,
+                margin: 0,
+                textMargin: 0,
+                fontSize: 8
+            });
+        }
+        window.render = render;
+    </script>
+</body>
+</html>

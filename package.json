@@ -1,0 +1,20 @@
+{
+  "name": "barcode-4-hao",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "browserify": "^14.1.0",
+    "domvm": "^3.0.5",
+    "exorcist": "^0.4.0",
+    "huntun": "git+https://github.com/normanzb/huntun.git",
+    "lessify": "^1.0.1",
+    "resize-sensor": "0.0.6",
+    "stylis": "^3.2.8"
+  },
+  "scripts": {
+    "build": "mkdir -p ./dist/ && browserify --standalone generate --debug --transform [ lessify ] ./generate  | exorcist ./dist/generate.js.map > ./dist/generate.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
